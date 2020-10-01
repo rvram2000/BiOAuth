@@ -8,3 +8,26 @@ canvas{
     top: 0;
     left: 0;
 }
+
+.butts{
+    display: flex;
+    justify-content: space-around;
+    margin: 2%;
+    user-select: none;
+}
+
+.butt{
+    border: solid 2px green;
+    border-radius: 15px;
+    padding: 10px 25px;
+    transition: all 250ms;
+}
+
+.butt:hover{
+    background-color: green;
+}
+
+.butts a{
+    color: black;
+    text-decoration: none;
+}
