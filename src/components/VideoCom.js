@@ -9,12 +9,12 @@ function VideoCom() {
   const vid = useRef(null);
   const vidElem = useRef(null);
   const [loadinfo, setloadinfo] = useState("Loading model");
-  let finaldetec = null;
-  let detections = null;
+  const [intervalid, setintervalid] = useState(0);
+  //const [captured, setcaptured] = useState(false);
   
   useEffect(()=>{
     loadModels();
-  });
+  },[]);
   
   function loadModels(){
     Promise.all([
@@ -25,11 +25,12 @@ function VideoCom() {
         faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
         faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
         faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-        faceapi.loadSsdMobilenetv1Model('/models')
+        faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
     ]).then(startVideo);
   }
   
   function startVideo(){
+    console.log("starting")
     setloadinfo("Loaded");
     navigator.mediaDevices.getUserMedia({ video: true })
     .then(
@@ -46,17 +47,21 @@ function VideoCom() {
       vidElem.current.append(canvas);
       const displaySize = { width: vid.current.width, height: vid.current.height }
       faceapi.matchDimensions(canvas, displaySize);
-      setInterval(async () => {
+      console.log("Video")
+      let imageInterval = setInterval(async () => {
+        console.log("Running "+imageInterval);
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-        detections = await faceapi.detectSingleFace(vid.current, new faceapi.TinyFaceDetectorOptions({scoreThreshold:0.75})).withFaceLandmarks().withFaceDescriptor();
+        const detections = await faceapi.detectSingleFace(vid.current, new faceapi.TinyFaceDetectorOptions({scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptor();
         if(detections){
-          
           const resizedDetections = faceapi.resizeResults(detections, displaySize);
           faceapi.draw.drawDetections(canvas, resizedDetections);
-          //console.log(resizedDetections);
           faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+          if(detections && detections.detection._score > 0.85){
+              localStorage.setItem("facedescriptor",JSON.stringify(detections));
+          }
         }
-      }, 500);
+      }, 200);
+      setintervalid(imageInterval);
       /*setInterval(()=>{
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
       },2000);*/
@@ -74,18 +79,6 @@ function VideoCom() {
     })
   }
   
-  
-  function login(){
-    finaldetec = null;
-    var loginselect = setInterval(()=>{
-      if(detections && detections.detection._score > 0.85){
-        finaldetec = detections;
-        clearInterval(loginselect);
-        console.log(finaldetec);
-      }
-    },100);
-  }
-  
   /*async function match(){
     const img = await faceapi.fetchImage("http://localhost:3080/me.jpg");
     const detect = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
@@ -94,25 +87,37 @@ function VideoCom() {
     console.log(bestMatch);
   }*/
   
-  function signup(){
-    finaldetec = null;
-    var loginselect = setInterval(()=>{
-      if(detections && detections.detection._score > 0.85){
-        finaldetec = detections;
-        clearInterval(loginselect);
-        console.log(finaldetec);
-        localStorage.setItem("facedescriptor",finaldetec.descriptor);
+  function capture(){
+    console.log("Hksdkksd");
+    localStorage.removeItem("facedescriptor");
+    var selectInter = setInterval(()=>{
+      let faceid = localStorage.getItem("facedescriptor");
+      if(faceid !== null){
+        const fid = JSON.parse(faceid);
+        clearInterval(selectInter);
+        clearInterval(intervalid);
+        console.log(fid);
+        //setcaptured(true);
       }
-    },100);
+    },200);
+  }
+  
+  function login(){
+    vid.current.srcObject.getTracks()[0].stop();
+  }
+  
+  function signup(){
+    vid.current.srcObject.getTracks()[0].stop();
   }
   
   return (
     <div>
-      <div>{loadinfo}</div>
+      <div>{loadinfo}. Capture face before login or signup</div>
       <div ref={vidElem} className="VidElem">
         <video ref={vid} width="720" height="560" autoPlay muted></video>
       </div>
       <div className="butts">
+        <div className="login butt" onClick={capture}>Capture</div>
         <div className="login butt" onClick={login}>Login</div>
         <Link to="/signup" className="signup butt" onClick={signup}>Signup</Link>
       </div>

@@ -16,7 +16,7 @@ canvas{
     user-select: none;
 }
 
-.butt{
+.butts .butt{
     border: solid 2px green;
     border-radius: 15px;
     padding: 10px 25px;
