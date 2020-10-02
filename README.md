@@ -1,12 +1,18 @@
 ## Enhanced OAuth with Biometrics(Face Recognition)
 
 OAuth is an open standard for access delegation, commonly used as a way for Internet users to grant websites or applications access to their information on other websites but without giving them the passwords.
-Here, we will add a layer of face recognition to Oauth.
+Here, we add a layer of face recognition to Oauth.
 
 ## Purpose 
 To ensure that the third party request is indeed genuine and not an automated request coming from a script or elsewhere. Thus, third party clients will now ask for users’ face. Username / Password based logins present in Oauth authorization will now be replaced with FaceID, thereby giving no chance for phishing attacks.
 
-For Backend : To run Node.Js(Express)
+## Packages Used
+face-api.js (for Face Recog.)
+jsonwebtoken (for JWT access token)
+
+
+## For Backend : To run Node.Js(Express)
+
 ## Common setup
 
 Clone the repo and install the dependencies.
@@ -31,7 +37,7 @@ npm run start:dev
 Open [http://localhost:3000](http://localhost:3000) and take a look around.
 
 
-For Frontend : To run react app
+## For Frontend : To run react app
 
 ## Available Scripts
 
