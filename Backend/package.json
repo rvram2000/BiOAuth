@@ -1,0 +1,16 @@
+{
+  "name": "bioauth",
+  "version": "1.0.0",
+  "description": "Enhanced OAuth with Biometrics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Prakash Kumar P, Ram R V, Sriram B",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "face-api.js": "^0.22.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
