@@ -1,5 +1,6 @@
 
 var router = require('express').Router()
+const fs = require('fs')
 let generateJWT = require('./login').generateJWT
 
 router.post('/',function(req,res,next)
@@ -7,10 +8,16 @@ router.post('/',function(req,res,next)
         
         name = req.body.name
         email = req.body.email
-        //dp = req.body.img
         fd = req.body.facedesc
-        redirect = req.body.redirect
         client = req.body.client
+        redirect = "thirdparty.com?token="
+        console.log(name)
+        console.log(email)
+        console.log(fd)
+        //dp = req.body.img
+        //redirect = req.body.redirect
+        
+        
         
 
         emailSet = ["abc@gmail.com","def@yahoo.com"]
@@ -28,10 +35,11 @@ router.post('/',function(req,res,next)
             
             var result = {
                 id : 123,
-                name : "Alan Turing",
-                email : "alan@cs.com",
-                fd : {0:0.9888,1:0.653,2:0.2334}
+                name : name,
+                email : email,
+                fd : fd
             }
+            fs.writeFileSync('Backend/api/fd.json',JSON.stringify(result))
 
             result["client"] = client
             token = generateJWT(result)

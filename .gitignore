@@ -2920,3 +2920,13 @@ Backend/node_modules/vary/index.js
 Backend/node_modules/vary/LICENSE
 Backend/node_modules/vary/package.json
 Backend/node_modules/vary/README.md
+Backend/node_modules/cors/CONTRIBUTING.md
+Backend/node_modules/cors/HISTORY.md
+Backend/node_modules/cors/lib/index.js
+Backend/node_modules/cors/LICENSE
+Backend/node_modules/cors/package.json
+Backend/node_modules/cors/README.md
+Backend/node_modules/object-assign/index.js
+Backend/node_modules/object-assign/license
+Backend/node_modules/object-assign/package.json
+Backend/node_modules/object-assign/readme.md

@@ -6,14 +6,13 @@ const faceapi = require("face-api.js")
 
 function verifyFace(fd1, fd2)
 {   
-    var fd1Array = []
-    var fd2Array = []
-    for(var i in fd1)
-    fd1Array.push(fd1[i])
-    for(var i in fd2)
-    fd2Array.push(fd2[i])
+    fd1Array = fd1.descriptors[0]
+    fd2Array = fd2.descriptors[0]
+    
 
-    const threshold = 0.25
+    const threshold = 0.40
+    console.log(fd1Array)
+    
 
     if(faceapi.euclideanDistance(fd1Array,fd2Array) <= threshold)
         return true
@@ -32,20 +31,24 @@ function generateJWT(payload)
 router.post('/',function(req,res,next)
     {
         
-        redirect = req.body.redirect
+        //redirect = req.body.redirect
+        redirect = "thirdparty.com?token="
         fd = req.body.facedesc
         client = req.body.client
         
 
         //Represents a cursor object
         //Make sure to convert the cursor object to json
-        var result = {
-            id : 123,
-            name : "Alan Turing",
-            email : "alan@cs.com",
-            fd : {0:0.9888,1:0.653,2:0.2334}
-         }
+        // var result = {
+        //     id : 123,
+        //     name : "Ram",
+        //     email : "rvram2000@gmail.com",
+        //     fd : fd
+        //  }
 
+        var result = fs.readFileSync('Backend/api/fd.json')
+        result = JSON.parse(result)
+        
          if(verifyFace(result.fd, fd))
          {
             result["client"] = client

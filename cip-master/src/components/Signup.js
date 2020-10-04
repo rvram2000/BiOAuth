@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as faceapi from 'face-api.js';
 
 import './Signup.css';
 
@@ -18,14 +19,32 @@ function Signup(){
         }
     }
     
-    function signup(){
+    async function signup(){
         console.log("Name: "+name);
         console.log("Email: "+email);
         let temp = localStorage.getItem("facedescriptor");
+        let fidesc;
         if(temp !== null){
+            fidesc = JSON.parse(temp);
+            //do faceapi.LabeledFaceDescriptors.fromJSON(fidesc); in backend before comparision;
             console.log("Face descriptor: ");
-            console.log(JSON.parse(temp));
+            console.log(fidesc);
         }
+        let data = {
+            name: name,
+            email: email,
+            facedesc: fidesc,
+            client: "Random string"
+        }
+        let response = await fetch("http://localhost:3081/signup",{
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        });
+        let result = await response.json();
+        console.log(result);
     }
     
     return(

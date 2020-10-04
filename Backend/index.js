@@ -1,7 +1,9 @@
 const express = require('express')
+var cors = require('cors')
 const app = express()
 app.use(express.json())
-const port = 3000
+app.use(cors())
+const port = 3081
 
 app.use('/',function(req, res, next)
 {

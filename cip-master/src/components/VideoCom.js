@@ -57,7 +57,9 @@ function VideoCom() {
           faceapi.draw.drawDetections(canvas, resizedDetections);
           faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
           if(detections && detections.detection._score > 0.85){
-              localStorage.setItem("facedescriptor",JSON.stringify(detections));
+              let labeldesc = new faceapi.LabeledFaceDescriptors("Person", [detections.descriptor]);
+              //console.log(labeldesc);
+              localStorage.setItem("facedescriptor",JSON.stringify(labeldesc));
           }
         }
       }, 200);
@@ -82,8 +84,14 @@ function VideoCom() {
   /*async function match(){
     const img = await faceapi.fetchImage("http://localhost:3080/me.jpg");
     const detect = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-    const faceMatcher = new faceapi.FaceMatcher(finaldetec, 0.6);
+    let faceid = localStorage.getItem("facedescriptor");
+    let fid = JSON.parse(faceid);
+    console.log(fid);
+    console.log(detect);
+    let fids = faceapi.LabeledFaceDescriptors.fromJSON(fid);
+    const faceMatcher = new faceapi.FaceMatcher(fids);
     const bestMatch = faceMatcher.findBestMatch(detect.descriptor);
+    //const bestMatch = faceapi.euclideanDistance(fid.descriptor,detect.descriptor);
     console.log(bestMatch);
   }*/
   
@@ -102,8 +110,28 @@ function VideoCom() {
     },200);
   }
   
-  function login(){
+  async function login(){
+    let fidesc;
+    let faceid = localStorage.getItem("facedescriptor");
+    if(faceid !== null){
+      fidesc = JSON.parse(faceid);
+      //do faceapi.LabeledFaceDescriptors.fromJSON(fidesc); in backend before comparision;
+      console.log(fidesc);
+    }
+    let data = {
+      facedesc: fidesc,
+      client: "Random string"
+    }
     vid.current.srcObject.getTracks()[0].stop();
+    let response = await fetch("http://localhost:3081/login",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(data)
+    });
+    let result = await response.json();
+    console.log(result);
   }
   
   function signup(){
