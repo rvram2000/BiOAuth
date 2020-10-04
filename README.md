@@ -1,4 +1,3 @@
-@@ -1,64 +0,0 @@
 ## Enhanced OAuth with Biometrics(Face Recognition)
 
 OAuth is an open standard for access delegation, commonly used as a way for Internet users to grant websites or applications access to their information on other websites but without giving them the passwords.
