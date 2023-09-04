@@ -6,6 +6,9 @@ Here, we add a layer of face recognition to Oauth.
 ## Purpose 
 To ensure that the third party request is indeed genuine and not an automated request coming from a script or elsewhere. Thus, third party clients will now ask for users’ face. Username / Password based logins present in Oauth authorization will now be replaced with FaceID, thereby giving no chance for phishing attacks.
 
+## Technologies
+Node.js, JSON
+
 ## Packages Used
 face-api.js (for Face Recog.)
 jsonwebtoken (for JWT access token)
